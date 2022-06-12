@@ -31,9 +31,7 @@ class TrainingScreen extends StatelessWidget {
       ),
       bottomNavigationBar: const CurrentInningBottomBar(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {
-          Provider.of<Training>(context, listen: false).pot()
-        },
+        onPressed: () => {Provider.of<Training>(context, listen: false).pot()},
         child: const Icon(Icons.plus_one_outlined),
       ),
     );
@@ -43,13 +41,14 @@ class TrainingScreen extends StatelessWidget {
 class TrainingStats extends StatelessWidget {
   const TrainingStats({Key? key}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     return Consumer<Training>(builder: (context, training, child) {
-      return Center(child:
-      Text("${training.score()}",
-        style: const TextStyle(fontSize: 48.0),),
+      return Center(
+        child: Text(
+          "${training.score()}",
+          style: const TextStyle(fontSize: 48.0),
+        ),
       );
     });
   }
@@ -97,9 +96,27 @@ class CurrentInning extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<Training>(builder: (context, training, child) {
-      return Text(
-        "${training.currentInning().score()}",
-        style: const TextStyle(fontSize: 64.0),
+      return Column(
+        children: [
+          Text(
+            "${training.currentInning().score()}",
+            style: const TextStyle(fontSize: 64.0),
+          ),
+          ButtonBar(
+            alignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                  onPressed: () => {training.foul()},
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.red)),
+                  child: const Text("Foul")),
+              ElevatedButton(
+                  onPressed: () => {training.miss()},
+                  child: const Text("Miss")),
+            ],
+          )
+        ],
       );
     });
   }
@@ -113,32 +130,24 @@ class CurrentInningBottomBar extends StatelessWidget {
     return Consumer<Training>(builder: (context, training, child) {
       return BottomAppBar(
         color: Colors.green,
-        child: Row(
-          children: [
-            IconButton(
-                onPressed: () =>
-                {
-                  training.undo()
-                },
-                icon: const Icon(Icons.undo_outlined)),
-            IconButton(
-                onPressed: () =>
-                {
-                  training.pot()
-                },
-                icon: const Icon(Icons.plus_one_outlined)),
-            IconButton(
-                onPressed: () =>
-                {
-                  training.foul()
-                }, icon: const Icon(Icons.cancel_outlined)),
-            IconButton(
-                onPressed: () =>
-                {
-                  training.miss()
-                },
-                icon: const Icon(Icons.safety_check_outlined)),
-          ],
+        child: IconTheme(
+          data: IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
+          child: Row(
+            children: [
+              IconButton(
+                  onPressed: () => {training.undo()},
+                  icon: const Icon(Icons.undo_outlined)),
+              IconButton(
+                  onPressed: () => {training.pot()},
+                  icon: const Icon(Icons.plus_one_outlined)),
+              IconButton(
+                  onPressed: () => {training.foul()},
+                  icon: const Icon(Icons.cancel_outlined)),
+              IconButton(
+                  onPressed: () => {training.miss()},
+                  icon: const Icon(Icons.safety_check_outlined)),
+            ],
+          ),
         ),
       );
     });
