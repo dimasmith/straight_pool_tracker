@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "928351974140",
+    "project_id": "straight-pool-trainer",
+    "storage_bucket": "straight-pool-trainer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928351974140:android:dbf433394a1ccb5c215d79",
+        "android_client_info": {
+          "package_name": "dev.anatolich.straight_pool_tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "928351974140-2nd4e63bvrmnvid857uc14al8jna266j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5Vw1JBvmxgYrX4w5eXEjwA4Vw7u1aYcE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "928351974140-2nd4e63bvrmnvid857uc14al8jna266j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
