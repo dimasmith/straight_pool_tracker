@@ -65,11 +65,14 @@ class MenuButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: child,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 16.0),
+        child: ElevatedButton(
+          onPressed: onPressed,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: child,
+          ),
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:straight_pool_tracker/start_training_screen.dart';
 
 import 'model/training.dart';
 
@@ -14,10 +15,16 @@ class TrainingScreen extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                {
-                  Provider.of<Trainings>(context, listen: false).finish();
-                  Navigator.pop(context);
-                }
+                showDialog<bool>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const ConfirmFinishTrainingDialog();
+                    }).then((finish) {
+                  if (finish != null && finish) {
+                    Provider.of<Trainings>(context, listen: false).finish();
+                    Navigator.pop(context);
+                  }
+                });
               },
               icon: const Icon(Icons.check))
         ],
@@ -34,6 +41,38 @@ class TrainingScreen extends StatelessWidget {
       //   onPressed: () => {Provider.of<Training>(context, listen: false).pot()},
       //   child: const Icon(Icons.plus_one_outlined),
       // ),
+    );
+  }
+}
+
+class ConfirmFinishTrainingDialog extends StatelessWidget {
+  const ConfirmFinishTrainingDialog({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+      children: [
+        ButtonMenu(children: [
+          Text(
+            "Finish Training?",
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          MenuButton(
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+            child: const Text("Finish"),
+          ),
+          MenuButton(
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+            child: const Text("Continue"),
+          ),
+        ])
+      ],
     );
   }
 }
@@ -60,7 +99,8 @@ class TrainingStats extends StatelessWidget {
 
 class Score extends StatelessWidget {
   const Score({
-    Key? key, required this.score,
+    Key? key,
+    required this.score,
   }) : super(key: key);
   final int score;
 
@@ -140,17 +180,19 @@ class CurrentInning extends StatelessWidget {
               children: [
                 ElevatedButton(
                     onPressed: () => {training.undo()},
-                    child: Icon(Icons.undo)),
+                    child: const Icon(Icons.undo)),
                 ElevatedButton(
                     onPressed: () => {training.foul()},
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
                             Colors.red.shade100)),
-                    child: Text("Foul")),
+                    child: const Text("Foul")),
                 ElevatedButton(
-                    onPressed: () => {training.miss()}, child: Text("Miss")),
+                    onPressed: () => {training.miss()},
+                    child: const Text("Miss")),
                 ElevatedButton(
-                    onPressed: () => {training.pot()}, child: Text("Pot")),
+                    onPressed: () => {training.pot()},
+                    child: const Text("Pot")),
               ],
             )
           ],
