@@ -28,7 +28,10 @@ class StraightPoolTrainingApp extends StatelessWidget {
           child: const TrainingScreen()),
       },
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green),
+        useMaterial3: true,
+        appBarTheme: const AppBarTheme(backgroundColor: Colors.green),
+        scaffoldBackgroundColor: Colors.green.shade200
       ),
     );
   }
