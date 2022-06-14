@@ -15,7 +15,7 @@ class TrainingScreen extends StatelessWidget {
           IconButton(
               onPressed: () {
                 {
-                  Provider.of<Training>(context, listen: false).finish();
+                  Provider.of<Trainings>(context, listen: false).finish();
                   Navigator.pop(context);
                 }
               },

@@ -1,5 +1,28 @@
 import 'package:flutter/material.dart';
 
+class Trainings extends ChangeNotifier {
+  Training? _currentTraining;
+
+  /// start new training if there's no training running
+  void start() {
+    _currentTraining = Training();
+    notifyListeners();
+  }
+
+  Training? current() {
+    return _currentTraining;
+  }
+
+  bool isRunning() {
+    return _currentTraining != null;
+  }
+
+  void finish() {
+    _currentTraining = null;
+    notifyListeners();
+  }
+}
+
 class Training extends ChangeNotifier {
   final List<Inning> _innings = [];
   List<TrainingEvent> _events = [];

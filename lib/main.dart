@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 void main() {
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (context) => Training()),
+      ChangeNotifierProvider<Trainings>(create: (context) => Trainings()),
     ],
     child: const StraightPoolTrainingApp(),
   ));
@@ -23,7 +23,9 @@ class StraightPoolTrainingApp extends StatelessWidget {
       initialRoute: "/",
       routes: {
         "/": (context) => const StartTrainingScreen(),
-        "/training": (context) => const TrainingScreen(),
+        "/training": (context) => ChangeNotifierProvider<Training>.value(
+          value: context.read<Trainings>().current() as Training,
+          child: const TrainingScreen()),
       },
       theme: ThemeData(
         primarySwatch: Colors.green,
