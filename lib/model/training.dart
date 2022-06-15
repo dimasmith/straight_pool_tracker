@@ -51,6 +51,11 @@ class Training extends ChangeNotifier {
     return _innings.length;
   }
 
+  int countFouls() {
+    return _events.where((element) => element.type == -1)
+        .toList().length;
+  }
+
   List<Inning> innings() {
     return _innings;
   }
@@ -183,6 +188,10 @@ class Inning {
     if (_points > 0) {
       _points--;
     }
+  }
+
+  bool pending() {
+    return _points == 0 && !_foul;
   }
 
   void foul() {

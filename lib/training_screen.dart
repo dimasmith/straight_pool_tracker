@@ -36,11 +36,6 @@ class TrainingScreen extends StatelessWidget {
           CurrentInning(),
         ],
       ),
-      // bottomNavigationBar: const CurrentInningBottomBar(),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () => {Provider.of<Training>(context, listen: false).pot()},
-      //   child: const Icon(Icons.plus_one_outlined),
-      // ),
     );
   }
 }
@@ -86,9 +81,38 @@ class TrainingStats extends StatelessWidget {
       return Card(
         child: Column(
           children: [
-            const CardTitle(title: "Score", icon: Icons.scoreboard),
-            Center(
-              child: Score(score: training.score()),
+            const CardTitle(title: "Stats", icon: Icons.scoreboard),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      "Score",
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    Score(score: training.score()),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Text(
+                      "Innings",
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    Score(score: training.countInnings() - 1),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Text(
+                      "Fouls",
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    Score(score: training.countFouls()),
+                  ],
+                ),
+              ],
             ),
           ],
         ),
@@ -126,7 +150,7 @@ class InningsGrid extends StatelessWidget {
               const CardTitle(title: "Innings", icon: Icons.add_chart),
               Expanded(
                 child: GridView.count(
-                  crossAxisCount: 5,
+                  crossAxisCount: 6,
                   children: training
                       .innings()
                       .map((inning) => InningGridTile(inning: inning))
@@ -148,11 +172,20 @@ class InningGridTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color textColor = inning.hasFoul() ? Colors.red : Colors.black;
-    return Center(
-      child: Text(
-        "${inning.score()}",
-        style: TextStyle(fontSize: 32.0, color: textColor),
+    Color tileColor =
+        (inning.hasFoul()) ? Colors.red.shade50 : Colors.green.shade50;
+    if (inning.pending()) {
+      tileColor = Colors.transparent;
+    }
+    String text = (inning.pending()) ? "" : inning.score().toString();
+
+    return Container(
+      color: tileColor,
+      child: Center(
+        child: Text(
+          text,
+          style: Theme.of(context).textTheme.headline4,
+        ),
       ),
     );
   }
@@ -178,55 +211,22 @@ class CurrentInning extends StatelessWidget {
             ButtonBar(
               alignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
+                InningActionButton(
                     onPressed: () => {training.undo()},
                     child: const Icon(Icons.undo)),
-                ElevatedButton(
+                InningActionButton(
                     onPressed: () => {training.foul()},
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            Colors.red.shade100)),
+                    error: true,
                     child: const Text("Foul")),
-                ElevatedButton(
+                InningActionButton(
                     onPressed: () => {training.miss()},
                     child: const Text("Miss")),
-                ElevatedButton(
+                InningActionButton(
                     onPressed: () => {training.pot()},
                     child: const Text("Pot")),
               ],
             )
           ],
-        ),
-      );
-    });
-  }
-}
-
-class CurrentInningBottomBar extends StatelessWidget {
-  const CurrentInningBottomBar({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<Training>(builder: (context, training, child) {
-      return BottomAppBar(
-        child: IconTheme(
-          data: IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
-          child: Row(
-            children: [
-              IconButton(
-                  onPressed: () => {training.undo()},
-                  icon: const Icon(Icons.undo_outlined)),
-              IconButton(
-                  onPressed: () => {training.pot()},
-                  icon: const Icon(Icons.plus_one_outlined)),
-              IconButton(
-                  onPressed: () => {training.foul()},
-                  icon: const Icon(Icons.cancel_outlined)),
-              IconButton(
-                  onPressed: () => {training.miss()},
-                  icon: const Icon(Icons.safety_check_outlined)),
-            ],
-          ),
         ),
       );
     });
@@ -253,11 +253,37 @@ class CardTitle extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: Text(
-            "$title",
+            title,
             style: Theme.of(context).textTheme.headline6,
           ),
         ),
       ],
+    );
+  }
+}
+
+class InningActionButton extends StatelessWidget {
+  final VoidCallback? onPressed;
+  final Widget? child;
+  final bool error;
+
+  const InningActionButton({Key? key, this.onPressed, this.child, this.error = false})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    MaterialStateProperty<Color?>? color =
+        Theme.of(context).elevatedButtonTheme.style?.backgroundColor;
+    if (error) {
+      color = MaterialStateProperty.all<Color>(Colors.red.shade100);
+    }
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ButtonStyle(backgroundColor: color),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: child,
+      ),
     );
   }
 }
